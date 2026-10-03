@@ -1,6 +1,6 @@
 {
   "name": "@zkmake/sound-desk",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A dev panel for @zkmake/sound-mixer: bus meters, levels, mute and solo; live voices with a leak trend; a log of plays, drops and steals; decoded memory per sample; soundscape and playlist controls. Docks like three-meter's HUD.",
   "keywords": [
     "audio",

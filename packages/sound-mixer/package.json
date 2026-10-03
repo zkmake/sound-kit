@@ -1,6 +1,6 @@
 {
   "name": "@zkmake/sound-mixer",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A mixer for web games on the Web Audio API: real buses with ducking, gain above 1 and a limiter; a typed sound registry with variants and voice caps; streamed music playlists; sounds placed in a three.js scene. No dependencies.",
   "keywords": [
     "audio",
