@@ -1,0 +1,77 @@
+{
+  "name": "@zkmake/sound-scape",
+  "version": "0.0.0",
+  "description": "Soundscapes for web games: a looping bed under emitters that fire on random timers, with no-repeat picks, tight random ranges, a voice cap and ducking. Howler or Web Audio, vanilla or React.",
+  "keywords": [
+    "ambience",
+    "audio",
+    "game-audio",
+    "howler",
+    "r3f",
+    "react",
+    "soundscape",
+    "web-audio"
+  ],
+  "homepage": "https://zkmake.github.io/sound-kit/sound-scape/",
+  "bugs": "https://github.com/zkmake/sound-kit/issues",
+  "license": "MIT",
+  "author": "Zubin Khavarian",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zkmake/sound-kit.git",
+    "directory": "packages/sound-scape"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./dist/index.js",
+    "./howler": "./dist/howler.js",
+    "./react": "./dist/react.js",
+    "./web-audio": "./dist/web-audio.js",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "ci:test": "vitest run",
+    "ci:typecheck": "tsc",
+    "pack:check": "npm pack --dry-run",
+    "test": "vitest watch",
+    "typecheck": "tsc"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/core": "catalog:",
+    "@types/howler": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "howler": "catalog:",
+    "publint": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "howler": ">=2.2",
+    "react": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "howler": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=20.19"
+  }
+}
