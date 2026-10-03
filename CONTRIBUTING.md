@@ -78,6 +78,22 @@ specifiers unresolved. Keep `dependencies` and `peerDependencies` as explicit, w
 - **Tests:** they run against `tests/fake-audio.ts`, a fake `AudioContext` whose `advance(seconds)`
   ends sources and timers on time.
 
+## sound-desk
+
+- **`src/core/model.ts`:** what the desk shows, worked out with no DOM: voice groups, the memory
+  summary, log lines and the voice trend. It's unit-tested.
+- **`src/ui/panel.ts`:** `createSoundDesk`, the bare panel.
+  - It reads the mixer through `MixerLike`, a `Pick` of `SoundMixer<string, string>`.
+  - It reads soundscapes and playlists structurally.
+  - `tests/mixer-types.ts` pins all three against the real classes (checked by `tsc`).
+- **`src/ui/mount.ts`:** the panel in three-meter's `mountDevPanel` frame. `@zkmake/three-meter`
+  is a regular dependency with an explicit range, as for three-textures.
+- **Peer dependency:** `@zkmake/sound-mixer` is an optional peer, because only its types are
+  imported.
+- **Changesets config:** it sets `onlyUpdatePeerDependentsWhenOutOfRange`, so a mixer release
+  doesn't force a major bump of the desk.
+- **Visual check:** check the desk by eye in the sound-mixer demo, where it's mounted.
+
 ## The site
 
 `apps/site` is a Vite app under the base `/sound-kit/`. GitHub Pages deploys it from the `pages`
@@ -90,7 +106,8 @@ job in `ci.yml`.
 - The sound-scape demo runs the same scenes through either backend (Web Audio or Howler) and either
   integration (vanilla or React, under StrictMode).
 - The sound-mixer demo has bus strips with meters, a sound pad, an engine driven by a slider,
-  music, the soundscape on the ambience bus, and a top-down view for placed sounds.
+  music, the soundscape on the ambience bus, and a top-down view for placed sounds. sound-desk is
+  mounted on it, docked right.
 - The samples in `public/audio` are synthesised by `bun run samples` (needs ffmpeg), so they
   carry no licence. Each sample comes as Opus/Ogg and AAC/M4A.
 

@@ -17,6 +17,7 @@
       "name": "@app/site",
       "version": "0.0.0",
       "dependencies": {
+        "@zkmake/sound-desk": "workspace:*",
         "@zkmake/sound-mixer": "workspace:*",
         "@zkmake/sound-scape": "workspace:*",
         "howler": "catalog:",
@@ -37,6 +38,34 @@
     "configs/typescript": {
       "name": "@config/typescript",
       "version": "0.1.0",
+    },
+    "packages/sound-desk": {
+      "name": "@zkmake/sound-desk",
+      "version": "0.0.0",
+      "dependencies": {
+        "@zkmake/three-meter": "^0.11.5",
+      },
+      "devDependencies": {
+        "@arethetypeswrong/core": "catalog:",
+        "@types/react": "catalog:",
+        "@types/react-dom": "catalog:",
+        "@zkmake/sound-mixer": "workspace:*",
+        "@zkmake/sound-scape": "workspace:*",
+        "publint": "catalog:",
+        "react": "catalog:",
+        "react-dom": "catalog:",
+        "tsdown": "catalog:",
+        "typescript": "catalog:",
+        "vitest": "catalog:",
+      },
+      "peerDependencies": {
+        "@zkmake/sound-mixer": ">=0.1.0",
+        "react": ">=18",
+      },
+      "optionalPeers": [
+        "@zkmake/sound-mixer",
+        "react",
+      ],
     },
     "packages/sound-mixer": {
       "name": "@zkmake/sound-mixer",
@@ -417,9 +446,13 @@
 
     "@yuku-toolchain/types": ["@yuku-toolchain/types@0.10.2", "", {}, "sha512-sSeo4SSSToiS+sSD+bwn/s94EEcaLJ7tG5LCp8gFYC1G5VzxzX7fqB6m9RU1yMD8KTpu6zdU/I1NlQf8hVBJ9Q=="],
 
+    "@zkmake/sound-desk": ["@zkmake/sound-desk@workspace:packages/sound-desk"],
+
     "@zkmake/sound-mixer": ["@zkmake/sound-mixer@workspace:packages/sound-mixer"],
 
     "@zkmake/sound-scape": ["@zkmake/sound-scape@workspace:packages/sound-scape"],
+
+    "@zkmake/three-meter": ["@zkmake/three-meter@0.11.5", "", { "peerDependencies": { "@react-three/fiber": ">=8", "react": ">=18" }, "optionalPeers": ["@react-three/fiber", "react"] }, "sha512-+x/pU3yhg+EQQVG056eiZxJJIXU9T9/KyeVB6VoimtqbZ6dZRJFBxJA2NUl5Q9zCI1dmoegTNPJgQx5cdYjYEA=="],
 
     "assertion-error": ["assertion-error@2.0.1", "", {}, "sha512-Izi8RQcffqCeNVgFigKli1ssklIbpHnCYc6AknXGYoB6grJqyeby7jv12JUQgmTAnIDnbck1uxksT4dzN3PWBA=="],
 

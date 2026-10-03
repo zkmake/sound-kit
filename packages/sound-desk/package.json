@@ -1,0 +1,78 @@
+{
+  "name": "@zkmake/sound-desk",
+  "version": "0.0.0",
+  "description": "A dev panel for @zkmake/sound-mixer: bus meters, levels, mute and solo; live voices with a leak trend; a log of plays, drops and steals; decoded memory per sample; soundscape and playlist controls. Docks like three-meter's HUD.",
+  "keywords": [
+    "audio",
+    "debug",
+    "devtools",
+    "game-audio",
+    "mixer",
+    "r3f",
+    "react",
+    "web-audio"
+  ],
+  "homepage": "https://zkmake.github.io/sound-kit/sound-mixer/",
+  "bugs": "https://github.com/zkmake/sound-kit/issues",
+  "license": "MIT",
+  "author": "Zubin Khavarian",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zkmake/sound-kit.git",
+    "directory": "packages/sound-desk"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./dist/index.js",
+    "./react": "./dist/react.js",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "ci:test": "vitest run",
+    "ci:typecheck": "tsc",
+    "pack:check": "npm pack --dry-run",
+    "test": "vitest watch",
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "@zkmake/three-meter": "^0.11.5"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/core": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@zkmake/sound-mixer": "workspace:*",
+    "@zkmake/sound-scape": "workspace:*",
+    "publint": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "@zkmake/sound-mixer": ">=0.1.0",
+    "react": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "@zkmake/sound-mixer": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=20.19"
+  }
+}
