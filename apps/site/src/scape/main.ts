@@ -6,7 +6,7 @@ import { type Integration, react, vanilla } from "./integrations.tsx";
 import { SAMPLES, SCENES, type SceneId } from "./scenes.ts";
 import { createTimeline } from "./timeline.ts";
 
-import "./style.css";
+import "../style.css";
 
 type Backend = "web-audio" | "howler";
 type IntegrationId = "vanilla" | "react";

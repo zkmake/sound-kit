@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sound-kit</title>
+    <meta
+      name="description"
+      content="Audio tools for browser games: soundscapes and a mixer with buses, ducking, music and placed sounds. Vanilla, React and three.js."
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"
+    />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="head">
+        <img class="mark" src="/favicon.svg" alt="" width="44" height="44" />
+        <div>
+          <p class="kit">zkmake</p>
+          <h1>sound-kit</h1>
+        </div>
+        <p class="lede">
+          Audio tools for browser games, each published on its own under <code>@zkmake/*</code>. No
+          dependencies, vanilla or React, and ready for three.js. The sibling of
+          <a href="https://zkmake.github.io/three-kit/">three-kit</a>.
+        </p>
+      </header>
+
+      <section class="cards">
+        <a class="card" href="sound-scape/">
+          <span class="card-name">sound-scape</span>
+          <span class="card-job">
+            The layer beneath your sound effects: a looping bed with emitters on random timers. No
+            repeats, tight ranges, a voice cap, ducking. Howler or Web Audio.
+          </span>
+          <code>bun add @zkmake/sound-scape</code>
+          <span class="card-go">Demo →</span>
+        </a>
+        <a class="card" href="sound-mixer/">
+          <span class="card-name">sound-mixer</span>
+          <span class="card-job">
+            One context, real buses with ducking and a limiter, a typed sound registry with variants
+            and voice caps, streamed music, slow motion, and sounds placed in a three.js scene.
+          </span>
+          <code>bun add @zkmake/sound-mixer</code>
+          <span class="card-go">Demo →</span>
+        </a>
+      </section>
+
+      <section class="panel">
+        <h2>Coming next</h2>
+        <ul class="plain">
+          <li><b>sound-desk</b>: a dev panel for the mixer, in three-meter's frame.</li>
+          <li><b>sound-drive</b>: loops driven by speed, impact sounds, combo ladders.</li>
+          <li><b>sound-synth</b>: procedural sound effects and a typing kit.</li>
+          <li><b>sound-audit</b>: a CLI for loudness, loop seams and tails.</li>
+        </ul>
+      </section>
+
+      <footer class="foot">
+        <span>MIT</span>
+        <a href="https://github.com/zkmake/sound-kit">GitHub</a>
+        <a href="https://zubin.dev/blog/web-game-soundscapes-1-concepts/">Why soundscapes</a>
+      </footer>
+    </main>
+  </body>
+</html>

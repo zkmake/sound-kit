@@ -6,7 +6,9 @@
       // Source, not dist, to match the Vite alias: see vite.config.ts.
       "@zkmake/sound-scape": ["../../packages/sound-scape/src/index.ts"],
       "@zkmake/sound-scape/react": ["../../packages/sound-scape/src/react/index.tsx"],
-      "@zkmake/sound-scape/*": ["../../packages/sound-scape/src/*/index.ts"]
+      "@zkmake/sound-scape/*": ["../../packages/sound-scape/src/*/index.ts"],
+      "@zkmake/sound-mixer": ["../../packages/sound-mixer/src/index.ts"],
+      "@zkmake/sound-mixer/*": ["../../packages/sound-mixer/src/*/index.ts"]
     }
   },
   "include": ["src", "vite.config.ts"]

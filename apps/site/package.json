@@ -12,6 +12,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@zkmake/sound-mixer": "workspace:*",
     "@zkmake/sound-scape": "workspace:*",
     "howler": "catalog:",
     "react": "catalog:",

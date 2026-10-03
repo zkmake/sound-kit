@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sound-mixer · sound-kit</title>
+    <meta
+      name="description"
+      content="A mixer for web games: real buses with ducking and a limiter, a typed sound registry, streamed music, slow motion and placed sounds."
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"
+    />
+  </head>
+  <body>
+    <main class="page">
+      <header class="head">
+        <img class="mark" src="/favicon.svg" alt="" width="44" height="44" />
+        <div>
+          <a class="kit" href="../">sound-kit</a>
+          <h1>sound-mixer</h1>
+        </div>
+        <p class="lede">
+          One audio context with real buses: levels above 1, ducking that reaches every voice, and a
+          limiter at the end. A typed registry of sounds with variants and voice caps, streamed
+          music, slow motion, and sounds placed in a scene. No dependencies.
+        </p>
+        <code class="install">bun add @zkmake/sound-mixer</code>
+      </header>
+
+      <section class="stage" aria-label="Mixer">
+        <div class="screen mixer-screen">
+          <div class="strips" id="strips"></div>
+          <button type="button" class="start" id="start">
+            <span class="play" aria-hidden="true"></span>
+            Start the mixer
+            <small>Sound starts on this click. Levels you set are kept for next time.</small>
+          </button>
+        </div>
+
+        <div class="rows">
+          <div class="row">
+            <span class="row-label">Sounds</span>
+            <div class="controls" id="pad">
+              <button
+                type="button"
+                data-play="step"
+                title="4 variants, never the same twice in a row"
+              >
+                Footstep
+              </button>
+              <button type="button" data-walk>Walk</button>
+              <button type="button" data-play="coin" title="Rate drawn from 0.97–1.08">Coin</button>
+              <button type="button" data-play="boom" title="Volume 1.6: above 1 is fine">
+                Boom ×1.6
+              </button>
+              <button type="button" data-play="click" title="On the ui bus">Click</button>
+              <button
+                type="button"
+                data-burst
+                title="16 coins in 0.4 s against a cap of 6: the oldest is stolen"
+              >
+                Burst ×16
+              </button>
+              <button
+                type="button"
+                data-delayed
+                title="After 1 s of audio time: pause and it waits"
+              >
+                Delayed boom
+              </button>
+            </div>
+          </div>
+
+          <div class="row">
+            <span class="row-label">Engine</span>
+            <div class="controls">
+              <button type="button" id="engine" aria-pressed="false">Run</button>
+              <label class="slider" for="speed"
+                >Speed <input id="speed" type="range" min="0" max="1" step="0.01" value="0.3"
+              /></label>
+            </div>
+          </div>
+
+          <div class="row">
+            <span class="row-label">Music</span>
+            <div class="controls">
+              <button type="button" id="music" aria-pressed="false">Play</button>
+              <button type="button" id="next">Next track</button>
+              <span class="readout" id="track">—</span>
+            </div>
+          </div>
+
+          <div class="row">
+            <span class="row-label">Ambience</span>
+            <div class="controls">
+              <button
+                type="button"
+                id="scape"
+                aria-pressed="false"
+                title="@zkmake/sound-scape on the mixer's ambience bus"
+              >
+                Meadow soundscape
+              </button>
+            </div>
+          </div>
+
+          <div class="row">
+            <span class="row-label">Whole mix</span>
+            <div class="controls">
+              <button type="button" id="duck" title="Hold: music and ambience dip −12 dB">
+                Hold to duck
+              </button>
+              <label class="slider" for="rate"
+                >Slow motion
+                <input id="rate" type="range" min="0.5" max="1.5" step="0.01" value="1"
+              /></label>
+              <button type="button" id="pause" aria-pressed="false">Pause</button>
+              <span class="readout" id="readout">idle</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="split">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Placed sound</h2>
+            <span class="status">
+              Seen from above: you're the dot in the middle, facing up. Drag the engine around.
+            </span>
+          </div>
+          <div class="group" role="radiogroup" aria-label="Spatial model" id="models">
+            <button type="button" data-model="cheap" aria-pressed="true">Falloff + pan</button>
+            <button type="button" data-model="hrtf" aria-pressed="false">HRTF panner</button>
+          </div>
+          <canvas
+            id="space"
+            class="space"
+            aria-label="Top-down view: drag the sound around the listener"
+          ></canvas>
+          <div class="controls">
+            <button type="button" id="placed" aria-pressed="false">Play placed engine</button>
+            <span class="readout" id="placed-readout"></span>
+          </div>
+        </div>
+        <div class="panel code">
+          <div class="panel-head">
+            <h2>The code</h2>
+          </div>
+          <pre id="code"></pre>
+        </div>
+      </section>
+
+      <footer class="foot">
+        <span>MIT · samples synthesised with ffmpeg for this page</span>
+        <a href="https://github.com/zkmake/sound-kit/tree/main/packages/sound-mixer"
+          >README and source</a
+        >
+      </footer>
+    </main>
+    <script type="module" src="/src/mixer/main.ts"></script>
+  </body>
+</html>
