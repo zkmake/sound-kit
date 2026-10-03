@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sound-scape · sound-kit</title>
+    <meta
+      name="description"
+      content="Soundscapes for web games: a looping bed under emitters on random timers. Howler or Web Audio, vanilla or React."
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"
+    />
+  </head>
+  <body>
+    <main class="page">
+      <header class="head">
+        <img class="mark" src="/favicon.svg" alt="" width="44" height="44" />
+        <div>
+          <p class="kit">sound-kit</p>
+          <h1>sound-scape</h1>
+        </div>
+        <p class="lede">
+          The layer beneath your sound effects: a looping bed, with short samples fired on random
+          timers above it. No sample twice in a row, tight random ranges, a voice cap and ducking.
+          On Howler or Web Audio, vanilla or React.
+        </p>
+        <code class="install">bun add @zkmake/sound-scape</code>
+      </header>
+
+      <section class="stage" aria-label="Demo">
+        <div class="bar">
+          <div class="group" role="radiogroup" aria-label="Scene" id="scenes">
+            <button type="button" data-scene="meadow" aria-pressed="true">Meadow</button>
+            <button type="button" data-scene="cafe" aria-pressed="false">Café</button>
+            <button type="button" data-scene="night" aria-pressed="false">Night</button>
+          </div>
+          <div class="group" role="radiogroup" aria-label="Audio backend" id="backends">
+            <button type="button" data-backend="web-audio" aria-pressed="true">Web Audio</button>
+            <button type="button" data-backend="howler" aria-pressed="false">Howler</button>
+          </div>
+          <div class="group" role="radiogroup" aria-label="Integration" id="integrations">
+            <button type="button" data-integration="vanilla" aria-pressed="true">Vanilla</button>
+            <button type="button" data-integration="react" aria-pressed="false">React</button>
+          </div>
+        </div>
+
+        <div class="screen">
+          <canvas
+            id="timeline"
+            aria-label="The last 30 seconds: the bed and each emitter's fires"
+          ></canvas>
+          <button type="button" class="start" id="start">
+            <span class="play" aria-hidden="true"></span>
+            Start the soundscape
+            <small>Headphones help. Sound starts on this click.</small>
+          </button>
+        </div>
+
+        <div class="controls">
+          <label class="slider" for="level">
+            Level <input id="level" type="range" min="0" max="1" step="0.01" value="0.8" />
+          </label>
+          <button type="button" id="mute" aria-pressed="false">Mute</button>
+          <button type="button" id="duck" title="Hold: the bed and every emitter dip −12 dB">
+            Hold to duck
+          </button>
+          <button type="button" id="suppress" aria-pressed="false">Hold emitters back</button>
+          <button type="button" id="pause" aria-pressed="false">Pause</button>
+          <span class="readout" id="readout">idle</span>
+        </div>
+        <div class="fires" id="fires" aria-label="Fire an emitter now"></div>
+      </section>
+
+      <section class="split">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>The definition</h2>
+            <span class="status" id="def-status"
+              >Edit it: the scene swaps half a second after you stop typing.</span
+            >
+          </div>
+          <textarea id="def" spellcheck="false" aria-label="Soundscape definition, JSON"></textarea>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Fires</h2>
+            <span class="status">Volume, rate and pan drawn per fire, within the ranges.</span>
+          </div>
+          <ol class="log" id="log"></ol>
+        </div>
+      </section>
+
+      <section class="panel code">
+        <div class="panel-head">
+          <h2 id="code-title">Vanilla</h2>
+        </div>
+        <pre id="code"></pre>
+      </section>
+
+      <footer class="foot">
+        <span>MIT · samples synthesised with ffmpeg for this page</span>
+        <a href="https://github.com/zkmake/sound-kit/tree/main/packages/sound-scape"
+          >README and source</a
+        >
+        <a href="https://zubin.dev/blog/web-game-soundscapes-1-concepts/">Why soundscapes</a>
+      </footer>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
