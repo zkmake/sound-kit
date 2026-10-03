@@ -1,6 +1,6 @@
 {
   "name": "@zkmake/sound-scape",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Soundscapes for web games: a looping bed under emitters that fire on random timers, with no-repeat picks, tight random ranges, a voice cap and ducking. Howler or Web Audio, vanilla or React.",
   "keywords": [
     "ambience",
