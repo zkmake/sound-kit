@@ -1,3 +1,4 @@
+import { mountSoundDesk } from "@zkmake/sound-desk";
 import { defineSounds, SoundMixer, type Voice } from "@zkmake/sound-mixer";
 import { Playlist } from "@zkmake/sound-mixer/music";
 import { soundscapeBus } from "@zkmake/sound-mixer/scape";
@@ -470,6 +471,13 @@ music.play();
 const space = createSpace(mixer, { listener: camera });
 space.play("engine", train, { falloff: [1, 8] });
 renderer.setAnimationLoop(() => { space.update(); /* … */ });`;
+
+// The desk: everything the mixer is doing, docked to the right edge.
+mountSoundDesk(mixer, {
+  scapes: { meadow: scape },
+  playlists: { music: playlist },
+  storageKey: "sound-kit-demo:desk",
+});
 
 enable();
 requestAnimationFrame(frame);

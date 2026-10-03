@@ -24,6 +24,7 @@ export default defineConfig({
         replacement: src("sound-scape/src/$1/index.ts"),
       },
       { find: /^@zkmake\/sound-mixer$/, replacement: src("sound-mixer/src/index.ts") },
+      { find: /^@zkmake\/sound-desk$/, replacement: src("sound-desk/src/index.ts") },
       {
         find: /^@zkmake\/sound-mixer\/(music|three|react|scape)$/,
         replacement: src("sound-mixer/src/$1/index.ts"),

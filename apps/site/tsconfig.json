@@ -8,7 +8,9 @@
       "@zkmake/sound-scape/react": ["../../packages/sound-scape/src/react/index.tsx"],
       "@zkmake/sound-scape/*": ["../../packages/sound-scape/src/*/index.ts"],
       "@zkmake/sound-mixer": ["../../packages/sound-mixer/src/index.ts"],
-      "@zkmake/sound-mixer/*": ["../../packages/sound-mixer/src/*/index.ts"]
+      "@zkmake/sound-mixer/*": ["../../packages/sound-mixer/src/*/index.ts"],
+      "@zkmake/sound-desk": ["../../packages/sound-desk/src/index.ts"],
+      "@zkmake/sound-desk/react": ["../../packages/sound-desk/src/react/index.tsx"]
     }
   },
   "include": ["src", "vite.config.ts"]
