@@ -1,0 +1,6 @@
+{
+  // By path rather than `@config/typescript`: a published package keeps its package.json free of
+  // private workspace dependencies.
+  "extends": "../../configs/typescript/tsconfig-lib.json",
+  "include": ["src", "tests"]
+}

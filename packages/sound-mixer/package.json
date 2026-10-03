@@ -1,0 +1,76 @@
+{
+  "name": "@zkmake/sound-mixer",
+  "version": "0.0.0",
+  "description": "A mixer for web games on the Web Audio API: real buses with ducking, gain above 1 and a limiter; a typed sound registry with variants and voice caps; streamed music playlists; sounds placed in a three.js scene. No dependencies.",
+  "keywords": [
+    "audio",
+    "game-audio",
+    "mixer",
+    "r3f",
+    "react",
+    "sfx",
+    "three",
+    "threejs",
+    "web-audio"
+  ],
+  "homepage": "https://zkmake.github.io/sound-kit/sound-mixer/",
+  "bugs": "https://github.com/zkmake/sound-kit/issues",
+  "license": "MIT",
+  "author": "Zubin Khavarian",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zkmake/sound-kit.git",
+    "directory": "packages/sound-mixer"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./dist/index.js",
+    "./music": "./dist/music.js",
+    "./react": "./dist/react.js",
+    "./scape": "./dist/scape.js",
+    "./three": "./dist/three.js",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "ci:test": "vitest run",
+    "ci:typecheck": "tsc",
+    "pack:check": "npm pack --dry-run",
+    "test": "vitest watch",
+    "typecheck": "tsc"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/core": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@types/three": "catalog:",
+    "@zkmake/sound-scape": "workspace:*",
+    "publint": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "three": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=20.19"
+  }
+}
