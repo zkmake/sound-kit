@@ -1,0 +1,5 @@
+[install]
+exact = true
+
+# Only install package versions published at least a day ago.
+minimumReleaseAge = 86400

@@ -1,0 +1,4 @@
+{
+  "$comment": "Private apps under apps/*.",
+  "extends": "./tsconfig-lib.json"
+}

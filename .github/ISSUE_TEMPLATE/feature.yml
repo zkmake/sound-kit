@@ -1,0 +1,11 @@
+name: Feature
+description: An adapter, option or package that isn't there yet
+labels: [enhancement]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What and why
+      description: What you would do with it, and what you do today instead.
+    validations:
+      required: true

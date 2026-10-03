@@ -1,0 +1,9 @@
+node_modules
+dist
+*.tsbuildinfo
+*.log
+.DS_Store
+.vite
+.turbo
+.astro
+.claude/launch.json

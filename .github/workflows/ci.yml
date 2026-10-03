@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run ci:format
+      - run: bun run ci:lint
+      - run: bun run ci:typecheck
+      - run: bun run ci:test
+      # Packages and apps; turbo orders them by dependency.
+      - run: bun run build
+      - run: bun run pack:check
+      # The site, for the `pages` job to deploy.
+      - if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: apps/site/dist
+
+  # GitHub Pages serves the site at zkmake.github.io/sound-kit/, deployed once checks pass on main.
+  pages:
+    needs: checks
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    # One deploy at a time; a newer push waits rather than cancelling one mid-way.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
