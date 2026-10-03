@@ -17,5 +17,8 @@ First release.
   place and a retry on the next press.
 - `./three`: `createSpace`, sounds placed on objects or points, with cheap falloff and pan or an
   HRTF panner.
+- Introspection for tools: `observe()` streams plays, ends, stops, steals, drops (with the reason),
+  loads and ducks. `voices()` lists what's playing, `samples()` reports each file's decoded size,
+  and `solo(bus)` hears one bus alone.
 - `./react`: settings hooks.
 - `./scape`: run `@zkmake/sound-scape` on a mixer bus.

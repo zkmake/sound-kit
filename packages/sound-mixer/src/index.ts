@@ -1,7 +1,15 @@
 /**
  * @zkmake/sound-mixer: the mixer. No DOM and no `AudioContext` at import, no dependencies.
  */
-export { defineSounds, SoundMixer, type Meter, type MixerOptions } from "./core/mixer.ts";
+export {
+  defineSounds,
+  SoundMixer,
+  type Meter,
+  type MixerLogEvent,
+  type MixerOptions,
+  type SampleInfo,
+  type VoiceInfo,
+} from "./core/mixer.ts";
 export type {
   BusOptions,
   DefaultBus,

@@ -415,6 +415,85 @@ describe("SoundMixer", () => {
     expect(mixer.play("click")).toBeNull();
   });
 
+  it("reports plays, steals, drops, stops, ends, loads and ducks to observers", async () => {
+    const mixer = make();
+    const events: string[] = [];
+    const off = mixer.observe((event) =>
+      events.push("reason" in event ? `drop ${event.sound} ${event.reason}` : `${event.type}`),
+    );
+
+    mixer.play("lazy");
+    await mixer.load();
+    expect(events).toContain("drop lazy loading");
+    expect(events.filter((event) => event === "load").length).toBeGreaterThan(5);
+
+    events.length = 0;
+    mixer.play("boom");
+    mixer.play("boom");
+    mixer.play("boom");
+    mixer.play("thud");
+    mixer.play("thud");
+    mixer.play("gone");
+    mixer.duck("music")();
+    expect(events).toEqual([
+      "play",
+      "play",
+      "steal",
+      "stop",
+      "play",
+      "play",
+      "drop thud cap",
+      "drop gone failed",
+      "duck",
+      "duck",
+    ]);
+
+    events.length = 0;
+    context.advance(2);
+    expect(events).toEqual(["end", "end", "end"]);
+
+    off();
+    mixer.play("click");
+    expect(events.length).toBe(3);
+  });
+
+  it("lists voices oldest first, and samples with their decoded size", async () => {
+    const mixer = make();
+
+    await mixer.load();
+    mixer.play("hum");
+    context.advance(0.5);
+    mixer.play("click", { delayMs: 100 });
+
+    const voices = mixer.voices();
+
+    expect(voices.map(({ sound, bus, loop }) => [sound, bus, loop])).toEqual([
+      ["hum", "ambience", true],
+      ["click", "ui", false],
+    ]);
+    expect(mixer.voices("ui").length).toBe(1);
+
+    const boom = mixer.samples().find((sample) => sample.url === "boom.ogg");
+
+    expect(boom?.sounds).toEqual(["boom", "thud"]);
+    expect(boom?.status).toBe("loaded");
+    expect(mixer.samples().find((sample) => sample.url === "gone.ogg")?.status).toBe("failed");
+  });
+
+  it("solos one bus without touching the saved settings", async () => {
+    const mixer = make();
+
+    await mixer.load();
+    mixer.solo("music");
+    expect(mixer.soloed).toBe("music");
+    expect((mixer.input("sfx") as unknown as FakeGain).gain.last).toBe(0);
+    expect((mixer.input("music") as unknown as FakeGain).gain.last).toBe(1);
+    expect(mixer.settings.mutedBuses).toEqual([]);
+
+    mixer.solo(null);
+    expect((mixer.input("sfx") as unknown as FakeGain).gain.last).toBe(1);
+  });
+
   it("leaves a shared context open", async () => {
     const shared = new FakeContext();
     const mixer = make({ context: shared as unknown as AudioContext });

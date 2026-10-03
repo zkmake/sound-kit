@@ -50,6 +50,7 @@ type MixerOptions<Name extends string, Bus extends string> = {
 
 type InternalVoice = Voice & {
   readonly started: number;
+  readonly loop: boolean;
   /** Re-apply the bus's global rate. */
   refreshRate(fadeMs: number): void;
 };
@@ -75,6 +76,42 @@ type Graph = {
 };
 
 type MixerEvent = "state" | "rate";
+
+/** What the mixer did, for a debug panel or a log. Only built while something observes. */
+type MixerLogEvent =
+  | { type: "play"; id: number; sound: string; bus: string; volume: number; rate: number }
+  | { type: "end" | "stop" | "steal"; id: number; sound: string; bus: string }
+  | {
+      type: "drop";
+      sound: string;
+      /** At its cap with `onLimit: "drop"`, a one-shot still loading, a file that failed, not in the registry, or no such bus. */
+      reason: "cap" | "loading" | "failed" | "unknown" | "no-bus";
+    }
+  | { type: "load"; url: string; ok: boolean }
+  | { type: "duck"; bus: string; gain: number };
+
+/** A voice playing now, as `voices()` reports it. */
+type VoiceInfo = {
+  readonly id: number;
+  readonly sound: string;
+  readonly bus: string;
+  /** Audio-clock seconds when it started (or will). */
+  readonly started: number;
+  readonly loop: boolean;
+};
+
+/** A sample file, as `samples()` reports it. */
+type SampleInfo = {
+  /** Its first URL. */
+  readonly url: string;
+  /** The sounds that play it. */
+  readonly sounds: readonly string[];
+  readonly status: "loading" | "loaded" | "failed";
+  /** Decoded PCM size: what it costs in memory, whatever the file's size. */
+  readonly bytes: number;
+  readonly duration: number;
+  readonly channels: number;
+};
 
 /** Live levels of a bus or the master, for meters. Both are linear, 0..1 (above 1 is clipping). */
 type Meter = { peak(): number; rms(): number };
@@ -109,12 +146,21 @@ class SoundMixer<Name extends string = string, Bus extends string = DefaultBus> 
   private readonly lastPick = new Map<string, string>();
   private readonly soundVoices = new Map<string, Set<InternalVoice>>();
   private readonly listeners = new Map<MixerEvent, Set<() => void>>();
+  private readonly observers = new Set<(event: MixerLogEvent) => void>();
+  private soloBus: string | null = null;
   private graph: Graph | null = null;
   private nextId = 1;
   private paused = false;
   private hidden = false;
   private disposed = false;
-  private readonly onGesture = () => this.sync();
+  private readonly onGesture = () => {
+    // A press means the page is showing, whatever the last visibility event said.
+    if (typeof document !== "undefined") {
+      this.hidden = document.visibilityState === "hidden";
+    }
+
+    this.sync();
+  };
   private readonly onVisibility = () => {
     this.hidden = document.visibilityState === "hidden";
     this.sync();
@@ -187,6 +233,7 @@ class SoundMixer<Name extends string = string, Bus extends string = DefaultBus> 
 
     const pending = this.decode(urls).then((buffer) => {
       this.decoded.set(key, buffer);
+      this.log({ type: "load", url: urls[0] ?? key, ok: buffer !== null });
 
       return buffer;
     });
@@ -239,6 +286,7 @@ class SoundMixer<Name extends string = string, Bus extends string = DefaultBus> 
 
     if (!def) {
       this.warn(name, "not in the sound registry");
+      this.log({ type: "drop", sound: name, reason: "unknown" });
 
       return null;
     }
@@ -249,6 +297,7 @@ class SoundMixer<Name extends string = string, Bus extends string = DefaultBus> 
 
     if (key === undefined) {
       this.warn(name, "has no src or variants");
+      this.log({ type: "drop", sound: name, reason: "unknown" });
 
       return null;
     }
@@ -259,6 +308,7 @@ class SoundMixer<Name extends string = string, Bus extends string = DefaultBus> 
 
     if (!bus) {
       this.warn(name, `plays on bus "${busName}", which this mixer doesn't have`);
+      this.log({ type: "drop", sound: name, reason: "no-bus" });
 
       return null;
     }
@@ -267,6 +317,8 @@ class SoundMixer<Name extends string = string, Bus extends string = DefaultBus> 
     const buffer = this.decoded.get(key);
 
     if (buffer === null) {
+      this.log({ type: "drop", sound: name, reason: "failed" });
+
       return null;
     }
 
@@ -274,6 +326,8 @@ class SoundMixer<Name extends string = string, Bus extends string = DefaultBus> 
       void this.bufferFor(key, sources(pool[keys.indexOf(key)]!));
 
       if (!loop) {
+        this.log({ type: "drop", sound: name, reason: "loading" });
+
         return null;
       }
     }
@@ -290,6 +344,8 @@ class SoundMixer<Name extends string = string, Bus extends string = DefaultBus> 
 
     if (full) {
       if (def.onLimit === "drop") {
+        this.log({ type: "drop", sound: name, reason: "cap" });
+
         return null;
       }
 
@@ -301,7 +357,10 @@ class SoundMixer<Name extends string = string, Bus extends string = DefaultBus> 
         }
       }
 
-      oldest?.stop(30);
+      if (oldest) {
+        this.log({ type: "steal", id: oldest.id, sound: oldest.sound, bus: oldest.bus });
+        oldest.stop(30);
+      }
     }
 
     this.lastPick.set(name, key);
@@ -380,6 +439,7 @@ class SoundMixer<Name extends string = string, Bus extends string = DefaultBus> 
       sound,
       bus: busName,
       started: startAt,
+      loop: spec.loop,
       get playing() {
         return playing;
       },
@@ -397,6 +457,7 @@ class SoundMixer<Name extends string = string, Bus extends string = DefaultBus> 
 
           if (playing) {
             release();
+            this.log({ type: "end", id: voice.id, sound, bus: busName });
             spec.onEnd?.();
           }
         };
@@ -415,6 +476,7 @@ class SoundMixer<Name extends string = string, Bus extends string = DefaultBus> 
         }
 
         release();
+        this.log({ type: "stop", id: voice.id, sound, bus: busName });
 
         if (!source) {
           disconnect();
@@ -452,6 +514,7 @@ class SoundMixer<Name extends string = string, Bus extends string = DefaultBus> 
 
     bus.voices.add(voice);
     mine.add(voice);
+    this.log({ type: "play", id: voice.id, sound, bus: busName, volume, rate });
 
     return voice;
   }
@@ -533,7 +596,9 @@ class SoundMixer<Name extends string = string, Bus extends string = DefaultBus> 
     rampTo(graph.master.gain, muted ? 0 : levels.master, now, fadeMs);
 
     for (const [name, bus] of graph.buses) {
-      const off = (mutedBuses as readonly string[]).includes(name);
+      const off =
+        (mutedBuses as readonly string[]).includes(name) ||
+        (this.soloBus !== null && this.soloBus !== name);
 
       rampTo(bus.input.gain, off ? 0 : (levels[name as Bus] ?? 1), now, fadeMs);
     }
@@ -552,6 +617,20 @@ class SoundMixer<Name extends string = string, Bus extends string = DefaultBus> 
     });
 
     return () => releases.forEach((release) => release());
+  }
+
+  /**
+   * Hear one bus alone, for finding a sound in the mix; `null` hears them all again. Not saved
+   * with the settings.
+   */
+  solo(bus: Bus | null, fadeMs = 30) {
+    this.soloBus = bus;
+    this.applyLevels(fadeMs);
+    this.emit("state");
+  }
+
+  get soloed(): Bus | null {
+    return this.soloBus as Bus | null;
   }
 
   isDucked(bus: Bus) {
@@ -621,6 +700,68 @@ class SoundMixer<Name extends string = string, Bus extends string = DefaultBus> 
   /** `"idle"` until the first load or play, then the context's state. */
   get state(): AudioContextState | "idle" {
     return this.graph?.context.state ?? "idle";
+  }
+
+  /**
+   * Every play, end, stop, steal, drop, load and duck, as it happens: for a debug panel or a log.
+   * Free while nothing observes. Returns the unsubscribe.
+   */
+  observe(listener: (event: MixerLogEvent) => void) {
+    this.observers.add(listener);
+
+    return () => {
+      this.observers.delete(listener);
+    };
+  }
+
+  private log(event: MixerLogEvent) {
+    this.observers.forEach((observer) => observer(event));
+  }
+
+  /** The voices playing now, oldest first. */
+  voices(bus?: Bus): readonly VoiceInfo[] {
+    if (!this.graph) {
+      return [];
+    }
+
+    const list: VoiceInfo[] = [];
+
+    for (const [name, node] of this.graph.buses) {
+      if (bus === undefined || bus === name) {
+        for (const { id, sound, started, loop } of node.voices) {
+          list.push({ id, sound, bus: name, started, loop });
+        }
+      }
+    }
+
+    return list.sort((a, b) => a.started - b.started);
+  }
+
+  /** Every sample file asked for so far, with what it costs decoded. */
+  samples(): readonly SampleInfo[] {
+    const users = new Map<string, string[]>();
+
+    for (const [name, def] of Object.entries(this.sounds)) {
+      for (const source of def?.variants ?? (def?.src === undefined ? [] : [def.src])) {
+        const key = JSON.stringify(sources(source));
+
+        users.set(key, [...(users.get(key) ?? []), name]);
+      }
+    }
+
+    return [...this.buffers.keys()].map((key) => {
+      const buffer = this.decoded.get(key);
+      const urls = JSON.parse(key) as string[];
+
+      return {
+        url: urls[0] ?? key,
+        sounds: users.get(key) ?? [],
+        status: buffer === undefined ? "loading" : buffer === null ? "failed" : "loaded",
+        bytes: buffer ? (buffer.length ?? 0) * (buffer.numberOfChannels ?? 1) * 4 : 0,
+        duration: buffer?.duration ?? 0,
+        channels: buffer?.numberOfChannels ?? 0,
+      };
+    });
   }
 
   /** Listen for `"state"` (context running, suspended, paused) or `"rate"` changes. Returns the unsubscribe. */
@@ -775,9 +916,10 @@ class SoundMixer<Name extends string = string, Bus extends string = DefaultBus> 
       buses.set(name, {
         input,
         duck,
-        ducker: createDucker((gain, fadeMs) =>
-          rampTo(duck.gain, gain, context.currentTime, fadeMs),
-        ),
+        ducker: createDucker((gain, fadeMs) => {
+          rampTo(duck.gain, gain, context.currentTime, fadeMs);
+          this.log({ type: "duck", bus: name, gain });
+        }),
         voices: new Set(),
         cap: typeof def === "number" ? Infinity : (def.voices ?? Infinity),
         rate: 1,
@@ -853,4 +995,4 @@ class SoundMixer<Name extends string = string, Bus extends string = DefaultBus> 
 }
 
 export { defineSounds, SoundMixer };
-export type { Meter, MixerOptions };
+export type { Meter, MixerLogEvent, MixerOptions, SampleInfo, VoiceInfo };
