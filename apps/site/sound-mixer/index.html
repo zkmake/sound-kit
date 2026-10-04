@@ -156,6 +156,35 @@
         </div>
       </section>
 
+      <section class="panel" id="desk">
+        <div class="panel-head">
+          <h2>The panel on the right is sound-desk</h2>
+          <span class="status">
+            A separate package, <code>@zkmake/sound-desk</code>: a dev panel for this mixer. It has
+            no demo page of its own; it needs a live mix to show, so it's mounted here.
+          </span>
+        </div>
+        <ul class="plain">
+          <li>
+            <b>mix</b>: a meter, level, mute and solo for each bus. Hold to duck and watch music and
+            ambience dip.
+          </li>
+          <li>
+            <b>voices</b>: what's playing, by sound, with a 30-second trend that flags a leak.
+          </li>
+          <li>
+            <b>log</b>: drops and steals. Press Burst ×16 and the coins past the cap of 6 show up as
+            steals.
+          </li>
+          <li><b>memory</b>: each sample's decoded size, flagging anything that should stream.</li>
+          <li><b>scenes</b>: fire the meadow's emitters, set its bed, play and skip music.</li>
+        </ul>
+        <pre>
+import { mountSoundDesk } from "@zkmake/sound-desk";
+
+mountSoundDesk(mixer, { scapes: { meadow }, playlists: { music } });</pre>
+      </section>
+
       <footer class="foot">
         <span>MIT · samples synthesised with ffmpeg for this page</span>
         <a href="https://github.com/zkmake/sound-kit/tree/main/packages/sound-mixer"

@@ -8,8 +8,8 @@ because it uses the same frame.
 bun add -d @zkmake/sound-desk   # or npm i -D / pnpm add -D
 ```
 
-Live demo: [zkmake.github.io/sound-kit/sound-mixer](https://zkmake.github.io/sound-kit/sound-mixer/).
-The desk is docked on the right.
+Live demo: the desk has no page of its own, because it needs a live mix to show. It's docked on
+the right of the [sound-mixer demo](https://zkmake.github.io/sound-kit/sound-mixer/#desk).
 
 - **Mix:** each bus and the master gets a peak and RMS meter with a dBFS readout, a level slider,
   mute (or switching the bus off) and solo. The voice count, duck state and rate show on each
