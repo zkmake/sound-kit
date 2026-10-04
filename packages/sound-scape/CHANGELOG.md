@@ -1,5 +1,11 @@
 # @zkmake/sound-scape
 
+## 0.1.1
+
+### Patch Changes
+
+- [`04308c7`](https://github.com/zkmake/sound-kit/commit/04308c71fe4ba6bb907925f0c0ea557c4d84d931) Thanks [@zkmake](https://github.com/zkmake)! - Export `SoundscapeAdapter`, `SampleSource`, `DuckOptions` and `LoadOptions` from the main entry too, so a custom adapter (or `@zkmake/sound-mixer/scape`) can be typed against it without importing an adapter entry.
+
 ## 0.1.0
 
 ### Minor Changes
