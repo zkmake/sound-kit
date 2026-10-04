@@ -113,7 +113,8 @@ job in `ci.yml`.
 
 ## Releasing
 
-Every user-facing change gets a changeset (`bun run changeset`). Merging the "Version Packages" PR
+Every user-facing change gets a changeset (`bun run changeset`). The version step (`changeset:version`) also
+updates `bun.lock`, because `changeset version` only bumps `package.json`. Merging the "Version Packages" PR
 that `release.yml` opens publishes to npm with provenance, through npm trusted publishing.
 
 A new package's first version is published by hand:

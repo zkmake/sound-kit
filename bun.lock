@@ -41,7 +41,7 @@
     },
     "packages/sound-desk": {
       "name": "@zkmake/sound-desk",
-      "version": "0.0.0",
+      "version": "0.1.0",
       "dependencies": {
         "@zkmake/three-meter": "^0.11.5",
       },
@@ -69,7 +69,7 @@
     },
     "packages/sound-mixer": {
       "name": "@zkmake/sound-mixer",
-      "version": "0.0.0",
+      "version": "0.1.0",
       "devDependencies": {
         "@arethetypeswrong/core": "catalog:",
         "@types/react": "catalog:",
@@ -93,7 +93,7 @@
     },
     "packages/sound-scape": {
       "name": "@zkmake/sound-scape",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "devDependencies": {
         "@arethetypeswrong/core": "catalog:",
         "@types/howler": "catalog:",

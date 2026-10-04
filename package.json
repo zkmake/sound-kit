@@ -31,7 +31,7 @@
   "scripts": {
     "build": "turbo run build",
     "changeset": "changeset",
-    "changeset:version": "changeset version",
+    "changeset:version": "changeset version && bun install --lockfile-only",
     "ci-local": "turbo run format:check lint:check ci:typecheck ci:test build pack:check",
     "ci:format": "turbo run format:check",
     "ci:lint": "turbo run lint:check",
